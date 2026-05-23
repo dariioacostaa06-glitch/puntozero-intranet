@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>PuntoZero · Intranet</title>
-<meta name="description" content="Intranet interna de PuntoZero. Proyectos, equipo y métricas." />
+<meta name="description" content="Intranet interna de PuntoZero." />
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0e14'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%234ade80'/%3E%3C/svg%3E" />
 
@@ -15,16 +15,14 @@
 
 <script>
 tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        bg:'#0b0e14', surface:'#131826', sunken:'#0e1320', border:'#1f2638',
-        text:'#e7ecf3', muted:'#8b95a7',
-        accent:'#4ade80', accent2:'#60a5fa', warn:'#facc15', danger:'#ef4444',
-      },
-      fontFamily: { sans:['Inter','system-ui','sans-serif'], mono:['"JetBrains Mono"','monospace'] },
-    }
-  }
+  theme: { extend: {
+    colors: {
+      bg:'#0b0e14', surface:'#131826', sunken:'#0e1320', border:'#1f2638',
+      text:'#e7ecf3', muted:'#8b95a7',
+      accent:'#4ade80', accent2:'#60a5fa', warn:'#facc15', danger:'#ef4444',
+    },
+    fontFamily: { sans:['Inter','system-ui','sans-serif'], mono:['"JetBrains Mono"','monospace'] },
+  } }
 }
 </script>
 
@@ -38,19 +36,32 @@ tailwind.config = {
       radial-gradient(ellipse 80% 50% at 50% -20%, rgba(74,222,128,0.07), transparent 70%),
       radial-gradient(ellipse 80% 50% at 50% 120%, rgba(96,165,250,0.04), transparent 70%);
   }
-  main, header, footer, #modal { position:relative; z-index:1; }
+  main, header, footer, #modal-config, #modal-detail, #modal-login { position:relative; z-index:1; }
   .skeleton { background:linear-gradient(90deg,#131826 25%,#1f2638 50%,#131826 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; }
   @keyframes shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
   .logo-dot { animation:pulse 2.4s ease-in-out infinite; }
   @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.55 } }
-  .repo-card { transition:transform .15s, border-color .15s, background .15s; }
+  .repo-card { transition:transform .15s, border-color .15s, background .15s; cursor:pointer; }
   .repo-card:hover { transform:translateY(-2px); border-color:#2c3851; background:#161c2d; }
   .lang-dot { width:10px; height:10px; border-radius:999px; display:inline-block; }
-  /* Toggle switch */
   .toggle { position:relative; width:36px; height:20px; background:#1f2638; border-radius:999px; transition:background .15s; cursor:pointer; flex-shrink:0; }
   .toggle::after { content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:999px; background:#8b95a7; transition:left .15s, background .15s; }
   .toggle.on { background:#1a3324; }
   .toggle.on::after { left:18px; background:#4ade80; }
+  input, textarea, select { color-scheme:dark; }
+  textarea { resize:vertical; }
+  .field { display:block; width:100%; background:#0e1320; border:1px solid #1f2638; border-radius:8px; padding:.5rem .75rem; font-size:.875rem; outline:none; }
+  .field:focus { border-color:#4ade80; }
+  .label { display:block; font-size:.7rem; text-transform:uppercase; letter-spacing:.15em; color:#8b95a7; margin-bottom:.25rem; font-family:'JetBrains Mono', monospace; }
+  .btn { padding:.6rem 1.2rem; border-radius:.5rem; font-weight:600; font-size:.875rem; transition:all .15s; cursor:pointer; }
+  .btn-primary { background:#4ade80; color:#0b0e14; }
+  .btn-primary:hover { background:#86efac; }
+  .btn-primary:disabled { opacity:.5; cursor:not-allowed; }
+  .btn-secondary { background:transparent; border:1px solid #1f2638; color:#e7ecf3; }
+  .btn-secondary:hover { border-color:#4ade80; color:#4ade80; }
+  .btn-danger { background:transparent; border:1px solid rgba(239,68,68,.4); color:#ef4444; }
+  .btn-danger:hover { background:rgba(239,68,68,.1); }
+  .phase-badge { font-family:'JetBrains Mono', monospace; font-size:.625rem; letter-spacing:.1em; padding:.25rem .5rem; border-radius:.375rem; text-transform:uppercase; font-weight:600; }
 </style>
 </head>
 
@@ -72,9 +83,13 @@ tailwind.config = {
       <a href="#proyectos" class="text-muted hover:text-text transition">Proyectos</a>
       <a href="#equipo" class="text-muted hover:text-text transition">Equipo</a>
       <a href="#stats" class="text-muted hover:text-text transition">Métricas</a>
-      <button id="open-modal" class="text-muted hover:text-accent transition flex items-center gap-1.5 mono text-xs">⚙ Configurar</button>
+      <button id="open-config" class="text-muted hover:text-accent transition mono text-xs">⚙ Configurar</button>
+      <span id="auth-status" class="mono text-xs"></span>
     </nav>
-    <button id="open-modal-mobile" class="sm:hidden text-muted hover:text-accent text-xl">⚙</button>
+    <div class="sm:hidden flex items-center gap-3">
+      <span id="auth-status-mobile" class="mono text-xs"></span>
+      <button id="open-config-mobile" class="text-muted hover:text-accent text-xl">⚙</button>
+    </div>
   </div>
 </header>
 
@@ -85,32 +100,15 @@ tailwind.config = {
     Ingeniería de software con rigor,<br>
     <span class="text-muted">para proyectos de escala local.</span>
   </h2>
-  <p class="text-muted mt-4 max-w-2xl text-[15px] leading-relaxed">
-    Absorbemos toda la complejidad técnica debajo del capó. Lo que sale al cliente: herramientas
-    ágiles, seguras y fáciles de usar. Esta intranet es el panel de control interno donde vive
-    el estado de cada proyecto.
-  </p>
 </section>
 
 <!-- STATS -->
 <section id="stats" class="max-w-6xl mx-auto px-6 mb-10">
   <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-    <div class="border border-border rounded-xl p-4 bg-surface/40">
-      <p class="mono text-[10px] text-muted uppercase tracking-widest">Proyectos visibles</p>
-      <p class="text-2xl font-bold mt-1" id="stat-projects">—</p>
-    </div>
-    <div class="border border-border rounded-xl p-4 bg-surface/40">
-      <p class="mono text-[10px] text-muted uppercase tracking-widest">Stack principal</p>
-      <p class="text-2xl font-bold mt-1" id="stat-stack">—</p>
-    </div>
-    <div class="border border-border rounded-xl p-4 bg-surface/40">
-      <p class="mono text-[10px] text-muted uppercase tracking-widest">Último push</p>
-      <p class="text-2xl font-bold mt-1" id="stat-last-push">—</p>
-    </div>
-    <div class="border border-border rounded-xl p-4 bg-surface/40">
-      <p class="mono text-[10px] text-muted uppercase tracking-widest">En producción</p>
-      <p class="text-2xl font-bold mt-1" id="stat-live">—</p>
-    </div>
+    <div class="border border-border rounded-xl p-4 bg-surface/40"><p class="mono text-[10px] text-muted uppercase tracking-widest">Proyectos</p><p class="text-2xl font-bold mt-1" id="stat-projects">—</p></div>
+    <div class="border border-border rounded-xl p-4 bg-surface/40"><p class="mono text-[10px] text-muted uppercase tracking-widest">En desarrollo</p><p class="text-2xl font-bold mt-1" id="stat-dev">—</p></div>
+    <div class="border border-border rounded-xl p-4 bg-surface/40"><p class="mono text-[10px] text-muted uppercase tracking-widest">En producción</p><p class="text-2xl font-bold mt-1" id="stat-live">—</p></div>
+    <div class="border border-border rounded-xl p-4 bg-surface/40"><p class="mono text-[10px] text-muted uppercase tracking-widest">En estudio</p><p class="text-2xl font-bold mt-1" id="stat-discovery">—</p></div>
   </div>
 </section>
 
@@ -125,21 +123,17 @@ tailwind.config = {
 
 <!-- PROYECTOS -->
 <section id="proyectos" class="max-w-6xl mx-auto px-6 mb-20">
-
   <div class="flex items-baseline justify-between mb-3 gap-3">
     <h3 class="text-lg font-semibold">Proyectos</h3>
     <p class="mono text-[10px] text-muted uppercase tracking-widest" id="repo-count">— repos</p>
   </div>
 
-  <!-- Filtros -->
   <div class="flex flex-col gap-3 mb-5">
-    <input id="search" type="search" placeholder="Buscar proyecto…"
-           class="bg-surface/60 border border-border rounded-lg px-4 py-2.5 text-sm outline-none focus:border-accent placeholder:text-muted/60" />
+    <input id="search" type="search" placeholder="Buscar proyecto…" class="field" />
     <div class="flex gap-2 overflow-x-auto" id="owner-filters"></div>
-    <div class="flex gap-2 overflow-x-auto" id="lang-filters"></div>
+    <div class="flex gap-2 overflow-x-auto" id="phase-filters"></div>
   </div>
 
-  <!-- Grid -->
   <div id="repo-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <div class="skeleton h-44 rounded-xl"></div>
     <div class="skeleton h-44 rounded-xl"></div>
@@ -149,7 +143,6 @@ tailwind.config = {
   <p id="empty" class="hidden text-center text-muted py-12 italic">Ningún proyecto coincide con el filtro.</p>
 </section>
 
-<!-- FOOTER -->
 <footer class="border-t border-border mt-10">
   <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-muted">
     <p class="mono">PuntoZero © <span id="year"></span></p>
@@ -157,48 +150,183 @@ tailwind.config = {
   </div>
 </footer>
 
-<!-- =================== MODAL CONFIGURACIÓN =================== -->
-<div id="modal" class="hidden fixed inset-0 z-30 bg-bg/95 backdrop-blur overflow-y-auto">
+<!-- =================== MODAL LOGIN =================== -->
+<div id="modal-login" class="hidden fixed inset-0 z-40 bg-bg/95 backdrop-blur flex items-center justify-center p-6">
+  <div class="max-w-md w-full">
+    <div class="text-center mb-6">
+      <div class="w-12 h-12 rounded-xl bg-surface border border-border flex items-center justify-center mx-auto mb-4">
+        <div class="w-4 h-4 rounded-full bg-accent logo-dot"></div>
+      </div>
+      <p class="mono text-[10px] uppercase tracking-[0.3em] text-accent mb-2">// privado</p>
+      <h2 class="text-2xl font-bold" id="login-title">Acceso a la intranet</h2>
+      <p class="text-muted text-sm mt-2" id="login-subtitle">Solo dos personas tienen este password.</p>
+    </div>
+    <div id="login-status" class="hidden mb-4 px-4 py-3 rounded-lg text-sm"></div>
+    <form id="login-form" class="space-y-3">
+      <label class="label">Password</label>
+      <input id="login-password" type="password" autocomplete="current-password" class="field" autofocus />
+      <div id="login-confirm-wrap" class="hidden">
+        <label class="label">Repítelo (primera configuración)</label>
+        <input id="login-password2" type="password" autocomplete="new-password" class="field" />
+      </div>
+      <label class="flex items-center gap-2 text-sm text-muted mt-2">
+        <input type="checkbox" id="login-remember" class="accent-accent"/> Recordarlo en este navegador
+      </label>
+      <div class="flex gap-2 pt-2">
+        <button type="submit" id="login-btn" class="btn btn-primary flex-1">Entrar</button>
+        <button type="button" id="login-guest" class="btn btn-secondary">Solo lo público</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- =================== MODAL DETALLE =================== -->
+<div id="modal-detail" class="hidden fixed inset-0 z-30 bg-bg/95 backdrop-blur overflow-y-auto">
   <div class="max-w-3xl mx-auto px-6 py-10">
+    <div class="flex items-center justify-between mb-6">
+      <p class="mono text-[10px] uppercase tracking-[0.3em] text-accent">// proyecto</p>
+      <button id="close-detail" class="text-muted hover:text-text text-2xl leading-none">×</button>
+    </div>
+    <div id="detail-body"></div>
+  </div>
+</div>
+
+<!-- =================== MODAL CONFIGURACIÓN =================== -->
+<div id="modal-config" class="hidden fixed inset-0 z-30 bg-bg/95 backdrop-blur overflow-y-auto">
+  <div class="max-w-4xl mx-auto px-6 py-10">
     <div class="flex items-center justify-between mb-6">
       <div>
         <p class="mono text-[10px] uppercase tracking-[0.3em] text-accent mb-1">// configurar</p>
-        <h3 class="text-xl font-bold">Mostrar u ocultar proyectos</h3>
-        <p class="text-muted text-sm mt-1">Los cambios se guardan en <span class="mono text-text">data.json</span> del repo y se propagan a la intranet en ~30 s.</p>
+        <h3 class="text-xl font-bold">Gestionar intranet</h3>
       </div>
-      <button id="close-modal" class="text-muted hover:text-text text-2xl leading-none" aria-label="Cerrar">×</button>
+      <button id="close-config" class="text-muted hover:text-text text-2xl leading-none">×</button>
     </div>
 
-    <div id="modal-status" class="hidden mb-4 px-4 py-3 rounded-lg text-sm"></div>
+    <div id="config-status" class="hidden mb-4 px-4 py-3 rounded-lg text-sm"></div>
 
-    <div id="modal-repos" class="border border-border rounded-xl divide-y divide-border bg-surface/40"></div>
-
-    <div class="flex flex-col sm:flex-row gap-3 mt-6">
-      <button id="save-btn" class="bg-accent text-bg font-semibold px-5 py-2.5 rounded-lg hover:bg-accent/90 transition disabled:opacity-50 disabled:cursor-not-allowed">Guardar y publicar</button>
-      <button id="cancel-btn" class="border border-border px-5 py-2.5 rounded-lg hover:border-text/40 transition">Cancelar</button>
-      <button id="forget-token" class="ml-auto text-xs mono text-muted hover:text-danger">Olvidar token</button>
+    <!-- Tabs -->
+    <div class="flex gap-2 mb-5 border-b border-border">
+      <button data-tab="manual" class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-accent text-accent">Proyectos manuales</button>
+      <button data-tab="visibility" class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent text-muted hover:text-text">Visibilidad GitHub</button>
+      <button data-tab="security" class="tab-btn px-4 py-2 text-sm font-medium border-b-2 border-transparent text-muted hover:text-text">Seguridad</button>
     </div>
 
-    <details class="mt-8 text-sm text-muted">
-      <summary class="cursor-pointer hover:text-text">¿Cómo se autoriza el guardado?</summary>
-      <div class="mt-3 space-y-2 leading-relaxed">
-        <p>Al guardar por primera vez te pedirá un <strong>GitHub Personal Access Token</strong> (fine-grained).</p>
-        <ol class="list-decimal pl-5 space-y-1">
-          <li>Ve a <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" class="text-accent hover:underline">Settings → Developer settings → Fine-grained tokens</a></li>
-          <li>Repository access: <span class="mono">Only select repositories</span> → elige <span class="mono">puntozero-intranet</span></li>
-          <li>Permissions → Repository permissions → <span class="mono">Contents: Read and write</span></li>
-          <li>Genera y copia. Se guarda en tu navegador (localStorage), nunca sale del cliente excepto a github.com.</li>
-        </ol>
+    <!-- Tab: manual -->
+    <div id="tab-manual">
+      <div class="flex justify-between items-center mb-3">
+        <p class="text-sm text-muted">Proyectos que aún no tienen repo en GitHub (estudios, propuestas, etc.)</p>
+        <button id="add-manual" class="btn btn-primary text-sm">+ Añadir proyecto</button>
       </div>
-    </details>
+      <div id="manual-list" class="space-y-3"></div>
+      <p id="manual-empty" class="hidden text-muted italic text-sm py-6 text-center">Sin proyectos manuales. Pulsa <span class="mono">+ Añadir</span></p>
+    </div>
+
+    <!-- Tab: visibility -->
+    <div id="tab-visibility" class="hidden">
+      <p class="text-sm text-muted mb-4">Oculta los repos de GitHub que no quieras mostrar en la intranet (forks, basura vieja, prototipos…).</p>
+      <div id="visibility-list" class="border border-border rounded-xl divide-y divide-border bg-surface/40"></div>
+    </div>
+
+    <!-- Tab: security -->
+    <div id="tab-security" class="hidden space-y-6">
+      <div>
+        <h4 class="font-semibold mb-2">Token de GitHub</h4>
+        <p class="text-sm text-muted mb-3">Necesario para guardar cambios. Se almacena solo en tu navegador.</p>
+        <button id="forget-token" class="btn btn-danger text-sm">Olvidar token GitHub</button>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Password de la intranet</h4>
+        <p class="text-sm text-muted mb-3">Si lo cambias, los datos se re-cifrarán con el nuevo. Asegúrate de avisar a Alex.</p>
+        <div class="flex gap-2">
+          <button id="change-password" class="btn btn-secondary text-sm">Cambiar password</button>
+          <button id="logout" class="btn btn-danger text-sm">Cerrar sesión</button>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Información</h4>
+        <p class="text-sm text-muted">Schema datos: v2 · Cifrado: AES-GCM 256 + PBKDF2-SHA256 250k · Solo proyectos manuales, fases y notas se cifran. Los repos de GitHub son públicos por naturaleza.</p>
+      </div>
+    </div>
+
+    <div class="flex gap-3 mt-6 pt-6 border-t border-border">
+      <button id="save-config" class="btn btn-primary">Guardar y publicar</button>
+      <button id="cancel-config" class="btn btn-secondary">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== MODAL EDITAR MANUAL =================== -->
+<div id="modal-edit-manual" class="hidden fixed inset-0 z-40 bg-bg/95 backdrop-blur overflow-y-auto">
+  <div class="max-w-2xl mx-auto px-6 py-10">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-xl font-bold" id="edit-manual-title">Proyecto manual</h3>
+      <button class="text-muted hover:text-text text-2xl leading-none close-edit-manual">×</button>
+    </div>
+    <form id="edit-manual-form" class="space-y-4">
+      <input type="hidden" id="em-id" />
+      <div>
+        <label class="label">Nombre *</label>
+        <input id="em-name" required class="field" placeholder="Cliente X · Web"/>
+      </div>
+      <div>
+        <label class="label">Descripción breve</label>
+        <textarea id="em-description" rows="2" class="field" placeholder="Resumen 1 línea…"></textarea>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label class="label">Responsable</label>
+          <select id="em-owner" class="field"></select>
+        </div>
+        <div>
+          <label class="label">Fase</label>
+          <select id="em-phase" class="field"></select>
+        </div>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label class="label">Tecnología principal</label>
+          <input id="em-language" class="field" placeholder="HTML, JavaScript, Python…"/>
+        </div>
+        <div>
+          <label class="label">URL externa (web cliente, propuesta…)</label>
+          <input id="em-external" class="field" placeholder="https://"/>
+        </div>
+      </div>
+      <div>
+        <label class="label">Topics (separados por coma)</label>
+        <input id="em-topics" class="field" placeholder="web, restauración, mvp"/>
+      </div>
+      <div>
+        <label class="label">Notas internas</label>
+        <textarea id="em-notes" rows="4" class="field" placeholder="Reuniones, requisitos, presupuesto, contactos…"></textarea>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-secondary close-edit-manual">Cancelar</button>
+        <button type="button" id="em-delete" class="btn btn-danger ml-auto hidden">Eliminar</button>
+      </div>
+    </form>
   </div>
 </div>
 
 <!-- ============================ JS ============================ -->
 <script>
+// ============= CONST =============
 const REPO_OWNER = 'dariioacostaa06-glitch';
 const REPO_NAME  = 'puntozero-intranet';
 const DATA_PATH  = 'data.json';
+
+const PHASES = [
+  { id:'idea',        label:'Idea',          color:'#8b95a7' },
+  { id:'discovery',   label:'Requisitos',    color:'#facc15' },
+  { id:'design',      label:'Diseño',        color:'#a78bfa' },
+  { id:'development', label:'Desarrollo',    color:'#60a5fa' },
+  { id:'testing',     label:'Testing',       color:'#fb923c' },
+  { id:'production',  label:'Producción',    color:'#4ade80' },
+  { id:'maintenance', label:'Mantenimiento', color:'#22d3ee' },
+  { id:'archived',    label:'Archivado',     color:'#71717a' },
+];
+const PHASE_BY_ID = Object.fromEntries(PHASES.map(p => [p.id, p]));
 
 const LANG_COLORS = {
   HTML:'#e34c26', CSS:'#563d7c', JavaScript:'#f1e05a', TypeScript:'#3178c6',
@@ -208,10 +336,24 @@ const LANG_COLORS = {
 };
 const langColor = l => LANG_COLORS[l] || '#8b95a7';
 
+const DEFAULT_PRIVATE = { manual_projects: [], phase_overrides: {}, notes: {} };
+
+// ============= STATE =============
+let DATA = null;          // public part
+let PRIV = null;          // decrypted private part (null si no auth)
+let activeOwner = null;
+let activePhase = null;
+let configTab = 'manual';
+let configHidden = new Set();           // working copy en modal config
+let configManualProjects = [];          // working copy
+let configPhaseOverrides = {};
+let configNotes = {};
+
+// ============= UTILS =============
+const esc = s => (s ?? '').toString().replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
 function timeAgo(iso) {
   if (!iso) return '—';
-  const d = new Date(iso);
-  const diff = (Date.now() - d.getTime()) / 1000;
+  const d = new Date(iso); const diff = (Date.now() - d.getTime()) / 1000;
   if (diff < 60) return 'hace seg';
   if (diff < 3600) return `hace ${Math.floor(diff/60)} min`;
   if (diff < 86400) return `hace ${Math.floor(diff/3600)} h`;
@@ -220,33 +362,200 @@ function timeAgo(iso) {
   if (diff < 86400*365) return `hace ${Math.floor(diff/(86400*30))} m`;
   return `hace ${Math.floor(diff/(86400*365))} a`;
 }
+function uid() { return 'm-' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36); }
+function repoKey(r) { return r.manual ? r.id : `${r.owner}/${r.name}`; }
+function getPhase(r) {
+  if (r.manual) return r.phase || 'idea';
+  return (PRIV && PRIV.phase_overrides[`${r.owner}/${r.name}`]) || 'idea';
+}
+function getNotes(r) {
+  if (r.manual) return r.notes || '';
+  return (PRIV && PRIV.notes[`${r.owner}/${r.name}`]) || '';
+}
 
-const esc = s => (s ?? '').toString()
-  .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
-  .replaceAll('"','&quot;').replaceAll("'",'&#39;');
+// ============= CRYPTO =============
+function b64encode(buf) {
+  const u8 = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+  let s = ''; u8.forEach(b => s += String.fromCharCode(b)); return btoa(s);
+}
+function b64decode(s) {
+  const bin = atob(s); const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i); return out;
+}
+async function deriveKey(password, salt) {
+  const baseKey = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name:'PBKDF2', salt, iterations:250000, hash:'SHA-256' },
+    baseKey,
+    { name:'AES-GCM', length:256 },
+    false, ['encrypt','decrypt']);
+}
+async function encryptPayload(password, obj) {
+  const salt = crypto.getRandomValues(new Uint8Array(32));
+  const key = await deriveKey(password, salt);
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const data = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, new TextEncoder().encode(JSON.stringify(obj)));
+  const ivCheck = crypto.getRandomValues(new Uint8Array(12));
+  const check = await crypto.subtle.encrypt({ name:'AES-GCM', iv:ivCheck }, key, new TextEncoder().encode('PZ_OK_v2'));
+  return {
+    salt: b64encode(salt), iv: b64encode(iv), data: b64encode(data),
+    iv_check: b64encode(ivCheck), check: b64encode(check),
+  };
+}
+async function decryptPayload(password, enc) {
+  const salt = b64decode(enc.salt);
+  const key = await deriveKey(password, salt);
+  // validate
+  try {
+    const checkPlain = await crypto.subtle.decrypt({ name:'AES-GCM', iv:b64decode(enc.iv_check) }, key, b64decode(enc.check));
+    if (new TextDecoder().decode(checkPlain) !== 'PZ_OK_v2') throw new Error('check fail');
+  } catch (e) { throw new Error('Password incorrecto.'); }
+  const plain = await crypto.subtle.decrypt({ name:'AES-GCM', iv:b64decode(enc.iv) }, key, b64decode(enc.data));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
 
-let DATA = null;
-let activeLang = null;
-let activeOwner = null;
-let modalHidden = new Set(); // estado temporal mientras el modal está abierto
-let originalSha = null;       // SHA de data.json en GitHub (para commit)
+// ============= AUTH (session) =============
+function getStoredPassword() {
+  return sessionStorage.getItem('pz_pwd') || localStorage.getItem('pz_pwd');
+}
+function setStoredPassword(p, remember) {
+  sessionStorage.setItem('pz_pwd', p);
+  if (remember) localStorage.setItem('pz_pwd', p); else localStorage.removeItem('pz_pwd');
+}
+function clearStoredPassword() {
+  sessionStorage.removeItem('pz_pwd');
+  localStorage.removeItem('pz_pwd');
+}
 
-function repoKey(r) { return `${r.owner}/${r.name}`; }
-
+// ============= LOAD =============
 async function load() {
   const r = await fetch(DATA_PATH + '?cb=' + Date.now());
   DATA = await r.json();
   document.getElementById('generated-at').textContent = (DATA.generated_at || '').replace('T',' ').slice(0,16);
   renderCofounders();
+
+  // Login flow
+  if (!DATA.encrypted) {
+    showLogin({ firstTime: true });
+  } else {
+    const stored = getStoredPassword();
+    if (stored) {
+      try {
+        PRIV = await decryptPayload(stored, DATA.encrypted);
+        hideLogin();
+      } catch (e) {
+        clearStoredPassword();
+        showLogin({ firstTime: false });
+      }
+    } else {
+      showLogin({ firstTime: false });
+    }
+  }
+  renderAll();
+}
+
+function renderAll() {
+  updateAuthStatus();
   renderStats();
   renderOwnerFilters();
-  renderLangFilters();
+  renderPhaseFilters();
   render();
 }
 
-function visibleRepos() {
+function updateAuthStatus() {
+  const authed = PRIV !== null;
+  const html = authed
+    ? '<span class="text-accent">●</span> auth'
+    : '<button id="login-again-btn" class="hover:text-accent">iniciar sesión</button>';
+  document.getElementById('auth-status').innerHTML = html;
+  document.getElementById('auth-status-mobile').innerHTML = authed ? '<span class="text-accent">●</span>' : '<span class="text-muted">○</span>';
+  document.querySelectorAll('#login-again-btn').forEach(b => b.addEventListener('click', () => showLogin({ firstTime: !DATA.encrypted })));
+}
+
+// ============= LOGIN UI =============
+function showLogin({ firstTime }) {
+  document.getElementById('modal-login').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  const title = document.getElementById('login-title');
+  const sub = document.getElementById('login-subtitle');
+  const confirmWrap = document.getElementById('login-confirm-wrap');
+  const btn = document.getElementById('login-btn');
+  if (firstTime) {
+    title.textContent = 'Crear password de la intranet';
+    sub.textContent = 'Primera vez. Crea un password que compartiréis los dos cofounders.';
+    confirmWrap.classList.remove('hidden');
+    btn.textContent = 'Crear';
+  } else {
+    title.textContent = 'Acceso a la intranet';
+    sub.textContent = 'Solo dos personas tienen este password.';
+    confirmWrap.classList.add('hidden');
+    btn.textContent = 'Entrar';
+  }
+  setLoginStatus('');
+  setTimeout(() => document.getElementById('login-password').focus(), 100);
+}
+function hideLogin() {
+  document.getElementById('modal-login').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+function setLoginStatus(msg, kind) {
+  const el = document.getElementById('login-status');
+  if (!msg) { el.className = 'hidden'; return; }
+  const colors = { ok:'bg-accent/10 text-accent border border-accent/30', err:'bg-danger/10 text-danger border border-danger/30', info:'bg-accent2/10 text-accent2 border border-accent2/30' };
+  el.className = `mb-4 px-4 py-3 rounded-lg text-sm ${colors[kind || 'info']}`;
+  el.textContent = msg;
+}
+
+document.getElementById('login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const pwd = document.getElementById('login-password').value.trim();
+  const pwd2 = document.getElementById('login-password2').value.trim();
+  const remember = document.getElementById('login-remember').checked;
+  if (!pwd) { setLoginStatus('Escribe un password.', 'err'); return; }
+
+  if (!DATA.encrypted) {
+    if (pwd !== pwd2) { setLoginStatus('Los passwords no coinciden.', 'err'); return; }
+    if (pwd.length < 6) { setLoginStatus('Mínimo 6 caracteres.', 'err'); return; }
+    setLoginStatus('Creando…', 'info');
+    PRIV = { ...DEFAULT_PRIVATE };
+    setStoredPassword(pwd, remember);
+    try {
+      await saveEverything();
+      hideLogin();
+      renderAll();
+    } catch (err) {
+      setLoginStatus(err.message, 'err');
+    }
+  } else {
+    setLoginStatus('Verificando…', 'info');
+    try {
+      PRIV = await decryptPayload(pwd, DATA.encrypted);
+      setStoredPassword(pwd, remember);
+      hideLogin();
+      renderAll();
+    } catch (err) {
+      setLoginStatus(err.message, 'err');
+    }
+  }
+});
+
+document.getElementById('login-guest').addEventListener('click', () => {
+  PRIV = null;
+  hideLogin();
+  renderAll();
+});
+
+// ============= RENDERS =============
+function allProjects() {
+  // Combina repos GitHub + manuales (si hay PRIV)
+  const repos = (DATA.repos || []).map(r => ({ ...r, manual: false }));
+  const manual = PRIV ? (PRIV.manual_projects || []).map(p => ({ ...p, manual: true })) : [];
+  return [...repos, ...manual];
+}
+
+function visibleProjects() {
   const hidden = new Set(DATA.hidden_repos || []);
-  return DATA.repos.filter(r => !hidden.has(repoKey(r)));
+  return allProjects().filter(p => !hidden.has(repoKey(p)));
 }
 
 function renderCofounders() {
@@ -267,251 +576,501 @@ function renderCofounders() {
 }
 
 function renderStats() {
-  const repos = visibleRepos();
-  const counts = {};
-  for (const r of repos) if (r.language) counts[r.language] = (counts[r.language]||0)+1;
-  const topLang = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0] || '—';
-  let lastPush = null;
-  for (const r of repos) if (r.pushed_at && (!lastPush || r.pushed_at > lastPush)) lastPush = r.pushed_at;
-  const live = repos.filter(r => r.pages_url || r.homepage).length;
-  document.getElementById('stat-projects').innerHTML = `${repos.length}<span class="text-base text-muted ml-1">/${DATA.repos.length}</span>`;
-  document.getElementById('stat-stack').textContent = topLang;
-  document.getElementById('stat-last-push').textContent = timeAgo(lastPush);
-  document.getElementById('stat-live').innerHTML = `${live}<span class="text-base text-muted ml-1">/${repos.length}</span>`;
+  const projs = visibleProjects();
+  const inPhase = id => projs.filter(p => getPhase(p) === id).length;
+  document.getElementById('stat-projects').textContent = projs.length;
+  document.getElementById('stat-dev').innerHTML = `${inPhase('development')}<span class="text-base text-muted ml-1">+${inPhase('testing')}</span>`;
+  document.getElementById('stat-live').innerHTML = `${inPhase('production')}<span class="text-base text-muted ml-1">+${inPhase('maintenance')}</span>`;
+  document.getElementById('stat-discovery').innerHTML = `${inPhase('discovery')}<span class="text-base text-muted ml-1">+${inPhase('idea')}</span>`;
 }
 
 function renderOwnerFilters() {
   const el = document.getElementById('owner-filters');
   const owners = DATA.cofounders || [];
   el.innerHTML = `
-    <button data-owner="" class="own-btn shrink-0 px-3 py-2 text-xs mono uppercase tracking-wider rounded-lg border border-border bg-surface/60 hover:border-accent flex items-center gap-2"><span>Todos</span></button>
+    <button data-owner="" class="own-btn shrink-0 px-3 py-2 text-xs mono uppercase tracking-wider rounded-lg border border-border bg-surface/60 hover:border-accent">Todos</button>
     ${owners.map(o => `
       <button data-owner="${esc(o.login)}" class="own-btn shrink-0 px-3 py-2 text-xs mono uppercase tracking-wider rounded-lg border border-border bg-surface/60 hover:border-accent flex items-center gap-2">
         <img src="${esc(o.avatar)}" class="w-4 h-4 rounded-full" alt=""/><span>${esc(o.name.split(' ')[0])}</span>
       </button>`).join('')}
   `;
-  el.querySelectorAll('.own-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      activeOwner = btn.dataset.owner || null;
-      el.querySelectorAll('.own-btn').forEach(b => {
-        const on = (b.dataset.owner || null) === activeOwner;
-        b.classList.toggle('border-accent', on);
-        b.classList.toggle('text-accent', on);
-      });
-      render();
+  el.querySelectorAll('.own-btn').forEach(btn => btn.addEventListener('click', () => {
+    activeOwner = btn.dataset.owner || null;
+    el.querySelectorAll('.own-btn').forEach(b => {
+      const on = (b.dataset.owner || null) === activeOwner;
+      b.classList.toggle('border-accent', on); b.classList.toggle('text-accent', on);
     });
-  });
+    render();
+  }));
 }
 
-function renderLangFilters() {
-  const langs = [...new Set(visibleRepos().map(r => r.language).filter(Boolean))].sort();
-  const el = document.getElementById('lang-filters');
+function renderPhaseFilters() {
+  const el = document.getElementById('phase-filters');
+  // count how many in each phase
+  const projs = visibleProjects();
+  const counts = {}; for (const p of projs) { const ph = getPhase(p); counts[ph] = (counts[ph]||0)+1; }
   el.innerHTML = `
-    <button data-lang="" class="lang-btn shrink-0 px-3 py-2 text-xs mono uppercase tracking-wider rounded-lg border border-border bg-surface/60 hover:border-accent">Todos</button>
-    ${langs.map(l => `
-      <button data-lang="${esc(l)}" class="lang-btn shrink-0 px-3 py-2 text-xs mono uppercase tracking-wider rounded-lg border border-border bg-surface/60 hover:border-accent flex items-center gap-2">
-        <span class="lang-dot" style="background:${langColor(l)}"></span>${esc(l)}
+    <button data-phase="" class="phase-btn shrink-0 px-3 py-2 text-xs mono uppercase tracking-wider rounded-lg border border-border bg-surface/60 hover:border-accent">Todas</button>
+    ${PHASES.filter(ph => counts[ph.id]).map(ph => `
+      <button data-phase="${ph.id}" class="phase-btn shrink-0 px-3 py-2 text-xs mono uppercase tracking-wider rounded-lg border border-border bg-surface/60 hover:border-accent flex items-center gap-2">
+        <span class="lang-dot" style="background:${ph.color}"></span>${esc(ph.label)} <span class="text-muted">${counts[ph.id]}</span>
       </button>`).join('')}
   `;
-  el.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      activeLang = btn.dataset.lang || null;
-      el.querySelectorAll('.lang-btn').forEach(b => {
-        const on = (b.dataset.lang || null) === activeLang;
-        b.classList.toggle('border-accent', on);
-        b.classList.toggle('text-accent', on);
-      });
-      render();
+  el.querySelectorAll('.phase-btn').forEach(btn => btn.addEventListener('click', () => {
+    activePhase = btn.dataset.phase || null;
+    el.querySelectorAll('.phase-btn').forEach(b => {
+      const on = (b.dataset.phase || null) === activePhase;
+      b.classList.toggle('border-accent', on); b.classList.toggle('text-accent', on);
     });
-  });
+    render();
+  }));
+}
+
+function phaseBadge(phaseId) {
+  const ph = PHASE_BY_ID[phaseId] || PHASE_BY_ID.idea;
+  return `<span class="phase-badge" style="color:${ph.color}; background:${ph.color}22; border:1px solid ${ph.color}44">${esc(ph.label)}</span>`;
 }
 
 function render() {
   const q = document.getElementById('search').value.trim().toLowerCase();
-  let repos = visibleRepos().filter(r => {
-    if (activeOwner && r.owner !== activeOwner) return false;
-    if (activeLang && r.language !== activeLang) return false;
-    if (q && !`${r.name} ${r.description} ${r.topics.join(' ')}`.toLowerCase().includes(q)) return false;
+  let projs = visibleProjects().filter(p => {
+    if (activeOwner && p.owner !== activeOwner) return false;
+    if (activePhase && getPhase(p) !== activePhase) return false;
+    if (q && !`${p.name} ${p.description || ''} ${(p.topics||[]).join(' ')}`.toLowerCase().includes(q)) return false;
     return true;
   });
-  repos.sort((a,b) => (b.pushed_at || '').localeCompare(a.pushed_at || ''));
+  projs.sort((a,b) => (b.pushed_at || b.updated_at || '').localeCompare(a.pushed_at || a.updated_at || ''));
 
-  document.getElementById('repo-count').textContent = `${repos.length} mostrados · ${DATA.repos.length} totales`;
+  document.getElementById('repo-count').textContent = `${projs.length} mostrados · ${allProjects().length} totales`;
   const grid = document.getElementById('repo-grid');
   const empty = document.getElementById('empty');
-  empty.classList.toggle('hidden', repos.length > 0);
+  empty.classList.toggle('hidden', projs.length > 0);
 
   const ownerById = Object.fromEntries((DATA.cofounders || []).map(c => [c.login, c]));
 
-  grid.innerHTML = repos.map(r => {
-    const liveUrl = r.pages_url || r.homepage;
-    const o = ownerById[r.owner];
+  grid.innerHTML = projs.map(p => {
+    const liveUrl = p.pages_url || p.homepage || p.external_url;
+    const o = ownerById[p.owner];
+    const ph = getPhase(p);
     return `
-      <article class="repo-card border border-border rounded-xl p-5 bg-surface/40 flex flex-col">
+      <article class="repo-card border border-border rounded-xl p-5 bg-surface/40 flex flex-col" data-key="${esc(repoKey(p))}">
         <div class="flex items-start justify-between gap-2 mb-2">
-          <a href="${esc(r.url)}" target="_blank" rel="noopener" class="font-semibold text-base text-text hover:text-accent transition truncate">${esc(r.name)}</a>
-          <span class="mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded ${r.visibility === 'PUBLIC' ? 'bg-accent/10 text-accent' : 'bg-warn/10 text-warn'}">${r.visibility.toLowerCase()}</span>
+          <span class="font-semibold text-base text-text truncate">${esc(p.name)}</span>
+          ${phaseBadge(ph)}
         </div>
-        <p class="text-sm text-muted leading-relaxed flex-1 mb-3 line-clamp-3">${esc(r.description || 'Sin descripción.')}</p>
-
-        ${r.topics.length ? `<div class="flex flex-wrap gap-1 mb-3">
-          ${r.topics.slice(0,4).map(t => `<span class="mono text-[10px] px-2 py-0.5 rounded bg-sunken text-muted border border-border">${esc(t)}</span>`).join('')}
+        <p class="text-sm text-muted leading-relaxed flex-1 mb-3 line-clamp-3">${esc(p.description || 'Sin descripción.')}</p>
+        ${(p.topics||[]).length ? `<div class="flex flex-wrap gap-1 mb-3">
+          ${(p.topics||[]).slice(0,4).map(t => `<span class="mono text-[10px] px-2 py-0.5 rounded bg-sunken text-muted border border-border">${esc(t)}</span>`).join('')}
         </div>` : ''}
-
         <div class="mt-auto pt-3 border-t border-border/60 flex items-center justify-between text-xs">
           <div class="flex items-center gap-2 text-muted">
             ${o ? `<img src="${esc(o.avatar)}" class="w-4 h-4 rounded-full" title="${esc(o.name)}" alt=""/>` : ''}
-            ${r.language ? `<span class="lang-dot" style="background:${langColor(r.language)}"></span><span class="mono">${esc(r.language)}</span>` : '<span class="mono text-muted/60">—</span>'}
+            ${p.language ? `<span class="lang-dot" style="background:${langColor(p.language)}"></span><span class="mono">${esc(p.language)}</span>` : (p.manual ? '<span class="mono text-warn">manual</span>' : '<span class="mono text-muted/60">—</span>')}
           </div>
           <div class="flex items-center gap-3 text-muted">
-            <span class="mono" title="${esc(r.last_commit_msg)}">${timeAgo(r.pushed_at)}</span>
-            ${liveUrl ? `<a href="${esc(liveUrl)}" target="_blank" rel="noopener" class="text-accent2 hover:underline">live ↗</a>` : ''}
+            <span class="mono">${timeAgo(p.pushed_at || p.updated_at)}</span>
           </div>
         </div>
       </article>
     `;
   }).join('');
+
+  grid.querySelectorAll('.repo-card').forEach(card => {
+    card.addEventListener('click', () => openDetail(card.dataset.key));
+  });
 }
 
-// ========== MODAL ==========
-function openModal() {
-  modalHidden = new Set(DATA.hidden_repos || []);
-  document.getElementById('modal').classList.remove('hidden');
+// ============= MODAL DETAIL =============
+function openDetail(key) {
+  const p = allProjects().find(x => repoKey(x) === key);
+  if (!p) return;
+  const ownerById = Object.fromEntries((DATA.cofounders || []).map(c => [c.login, c]));
+  const o = ownerById[p.owner];
+  const ph = getPhase(p);
+  const notes = getNotes(p);
+  const langsBar = (p.languages || []).slice(0, 5).map(([l, pct]) => `
+    <div class="flex items-center gap-2 text-xs mb-1.5">
+      <span class="lang-dot" style="background:${langColor(l)}"></span>
+      <span class="mono w-24 shrink-0">${esc(l)}</span>
+      <div class="flex-1 h-1.5 bg-sunken rounded-full overflow-hidden">
+        <div style="width:${pct}%; background:${langColor(l)}" class="h-full"></div>
+      </div>
+      <span class="mono text-muted w-8 text-right">${pct}%</span>
+    </div>`).join('');
+  const liveUrl = p.pages_url || p.homepage || p.external_url;
+
+  const body = `
+    <div class="flex items-start justify-between gap-4 flex-wrap mb-4">
+      <div class="flex-1 min-w-0">
+        <h2 class="text-2xl font-bold">${esc(p.name)}</h2>
+        <p class="mono text-xs text-muted mt-1">${esc(p.owner)}${p.manual ? ' · proyecto manual' : ''}</p>
+      </div>
+      ${phaseBadge(ph)}
+    </div>
+
+    <p class="text-text leading-relaxed mb-6">${esc(p.description || 'Sin descripción.')}</p>
+
+    ${(p.topics || []).length ? `<div class="flex flex-wrap gap-1.5 mb-6">
+      ${(p.topics || []).map(t => `<span class="mono text-[11px] px-2 py-1 rounded bg-sunken text-muted border border-border">${esc(t)}</span>`).join('')}
+    </div>` : ''}
+
+    <div class="grid sm:grid-cols-2 gap-5 mb-6">
+      <div>
+        <p class="mono text-[10px] uppercase tracking-widest text-muted mb-3">Stack</p>
+        ${langsBar || (p.language ? `<div class="flex items-center gap-2"><span class="lang-dot" style="background:${langColor(p.language)}"></span><span class="mono text-sm">${esc(p.language)}</span></div>` : '<p class="text-sm text-muted">—</p>')}
+      </div>
+      <div>
+        <p class="mono text-[10px] uppercase tracking-widest text-muted mb-3">Actividad</p>
+        <div class="space-y-1.5 text-sm">
+          ${p.pushed_at ? `<p class="text-muted">Último push <span class="text-text">${timeAgo(p.pushed_at)}</span></p>` : ''}
+          ${p.updated_at && !p.pushed_at ? `<p class="text-muted">Modificado <span class="text-text">${timeAgo(p.updated_at)}</span></p>` : ''}
+          ${p.last_commit_msg ? `<p class="text-muted text-xs mono">"${esc(p.last_commit_msg)}"</p>` : ''}
+          ${typeof p.stars === 'number' ? `<p class="text-muted">★ ${p.stars} · ⑂ ${p.forks}</p>` : ''}
+        </div>
+      </div>
+    </div>
+
+    ${notes ? `<div class="mb-6">
+      <p class="mono text-[10px] uppercase tracking-widest text-muted mb-2">Notas internas</p>
+      <div class="bg-sunken border border-border rounded-lg p-4 text-sm whitespace-pre-wrap leading-relaxed">${esc(notes)}</div>
+    </div>` : ''}
+
+    <div class="flex flex-wrap gap-2 pt-4 border-t border-border">
+      ${p.url ? `<a target="_blank" rel="noopener" href="${esc(p.url)}" class="btn btn-secondary text-sm">GitHub ↗</a>` : ''}
+      ${liveUrl ? `<a target="_blank" rel="noopener" href="${esc(liveUrl)}" class="btn btn-secondary text-sm">Live ↗</a>` : ''}
+      ${PRIV ? `
+        ${p.manual
+          ? `<button class="btn btn-primary text-sm ml-auto" id="detail-edit-manual" data-id="${esc(p.id)}">✏ Editar</button>`
+          : `<button class="btn btn-secondary text-sm ml-auto" id="detail-edit-github">✏ Cambiar fase / notas</button>`
+        }` : '<p class="text-xs text-muted ml-auto self-center">Inicia sesión para editar</p>'}
+    </div>
+
+    ${PRIV && !p.manual ? `<div id="github-edit" class="hidden mt-4 space-y-3 border-t border-border pt-4">
+      <div>
+        <label class="label">Fase</label>
+        <select id="github-phase-select" class="field">${PHASES.map(ph2 => `<option value="${ph2.id}" ${ph2.id === ph ? 'selected' : ''}>${ph2.label}</option>`).join('')}</select>
+      </div>
+      <div>
+        <label class="label">Notas internas</label>
+        <textarea id="github-notes" rows="4" class="field">${esc(notes)}</textarea>
+      </div>
+      <div class="flex gap-2">
+        <button id="github-save-edit" class="btn btn-primary text-sm">Guardar</button>
+        <button id="github-cancel-edit" class="btn btn-secondary text-sm">Cancelar</button>
+      </div>
+    </div>` : ''}
+  `;
+  document.getElementById('detail-body').innerHTML = body;
+  document.getElementById('modal-detail').classList.remove('hidden');
   document.body.style.overflow = 'hidden';
-  renderModalList();
-  setModalStatus('');
+
+  if (PRIV) {
+    if (p.manual) {
+      document.getElementById('detail-edit-manual').addEventListener('click', () => {
+        closeDetail();
+        openManualEditor(p.id);
+      });
+    } else {
+      const editBtn = document.getElementById('detail-edit-github');
+      const editBox = document.getElementById('github-edit');
+      editBtn.addEventListener('click', () => editBox.classList.remove('hidden'));
+      document.getElementById('github-cancel-edit').addEventListener('click', () => editBox.classList.add('hidden'));
+      document.getElementById('github-save-edit').addEventListener('click', async () => {
+        const newPhase = document.getElementById('github-phase-select').value;
+        const newNotes = document.getElementById('github-notes').value.trim();
+        const k = `${p.owner}/${p.name}`;
+        PRIV.phase_overrides[k] = newPhase;
+        if (newNotes) PRIV.notes[k] = newNotes; else delete PRIV.notes[k];
+        try {
+          await saveEverything();
+          closeDetail();
+          renderAll();
+        } catch (e) { alert('Error guardando: ' + e.message); }
+      });
+    }
+  }
 }
-function closeModal() {
-  document.getElementById('modal').classList.add('hidden');
+function closeDetail() {
+  document.getElementById('modal-detail').classList.add('hidden');
   document.body.style.overflow = '';
 }
+document.getElementById('close-detail').addEventListener('click', closeDetail);
 
-function renderModalList() {
+// ============= MODAL CONFIG =============
+function openConfig() {
+  if (!PRIV) { showLogin({ firstTime: !DATA.encrypted }); return; }
+  // copia de trabajo
+  configHidden = new Set(DATA.hidden_repos || []);
+  configManualProjects = JSON.parse(JSON.stringify(PRIV.manual_projects || []));
+  configPhaseOverrides = JSON.parse(JSON.stringify(PRIV.phase_overrides || {}));
+  configNotes = JSON.parse(JSON.stringify(PRIV.notes || {}));
+  document.getElementById('modal-config').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  showConfigTab('manual');
+  setConfigStatus('');
+}
+function closeConfig() {
+  document.getElementById('modal-config').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+function showConfigTab(name) {
+  configTab = name;
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const on = b.dataset.tab === name;
+    b.classList.toggle('border-accent', on); b.classList.toggle('text-accent', on);
+    b.classList.toggle('border-transparent', !on); b.classList.toggle('text-muted', !on);
+  });
+  document.getElementById('tab-manual').classList.toggle('hidden', name !== 'manual');
+  document.getElementById('tab-visibility').classList.toggle('hidden', name !== 'visibility');
+  document.getElementById('tab-security').classList.toggle('hidden', name !== 'security');
+  if (name === 'manual') renderManualList();
+  if (name === 'visibility') renderVisibilityList();
+}
+document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => showConfigTab(b.dataset.tab)));
+
+function renderManualList() {
+  const el = document.getElementById('manual-list');
+  document.getElementById('manual-empty').classList.toggle('hidden', configManualProjects.length > 0);
+  el.innerHTML = configManualProjects.map(p => `
+    <div class="border border-border rounded-xl p-4 bg-surface/40 flex items-center gap-3" data-id="${esc(p.id)}">
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <p class="font-semibold truncate">${esc(p.name)}</p>
+          ${phaseBadge(p.phase || 'idea')}
+        </div>
+        <p class="text-xs text-muted truncate mt-1">${esc(p.description || 'sin descripción')}</p>
+      </div>
+      <button class="btn btn-secondary text-xs edit-manual">Editar</button>
+      <button class="btn btn-danger text-xs delete-manual">×</button>
+    </div>
+  `).join('');
+  el.querySelectorAll('.edit-manual').forEach(b => b.addEventListener('click', e => openManualEditor(e.target.closest('[data-id]').dataset.id)));
+  el.querySelectorAll('.delete-manual').forEach(b => b.addEventListener('click', e => {
+    const id = e.target.closest('[data-id]').dataset.id;
+    if (confirm('¿Eliminar este proyecto manual?')) {
+      configManualProjects = configManualProjects.filter(x => x.id !== id);
+      renderManualList();
+    }
+  }));
+}
+
+function renderVisibilityList() {
   const ownerById = Object.fromEntries((DATA.cofounders || []).map(c => [c.login, c]));
-  const repos = [...DATA.repos].sort((a,b) => (b.pushed_at || '').localeCompare(a.pushed_at || ''));
-  const el = document.getElementById('modal-repos');
-  el.innerHTML = repos.map(r => {
-    const key = repoKey(r);
-    const isHidden = modalHidden.has(key);
+  const repos = [...(DATA.repos || [])].sort((a,b) => (b.pushed_at || '').localeCompare(a.pushed_at || ''));
+  document.getElementById('visibility-list').innerHTML = repos.map(r => {
+    const key = `${r.owner}/${r.name}`;
+    const hidden = configHidden.has(key);
     const o = ownerById[r.owner];
     return `
       <div class="px-4 py-3 flex items-center gap-3" data-key="${esc(key)}">
         ${o ? `<img src="${esc(o.avatar)}" class="w-7 h-7 rounded-full" alt=""/>` : '<div class="w-7 h-7 rounded-full bg-sunken"></div>'}
         <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2">
-            <p class="font-semibold truncate">${esc(r.name)}</p>
-            ${r.language ? `<span class="lang-dot" style="background:${langColor(r.language)}"></span><span class="mono text-[10px] text-muted">${esc(r.language)}</span>` : ''}
-          </div>
+          <p class="font-semibold truncate">${esc(r.name)}</p>
           <p class="mono text-[11px] text-muted truncate">${esc(r.owner)} · ${esc(r.description || 'sin descripción')}</p>
         </div>
-        <span class="text-xs mono text-muted shrink-0 hidden sm:inline">${isHidden ? 'oculto' : 'visible'}</span>
-        <button class="toggle ${isHidden ? '' : 'on'}" aria-label="Visible"></button>
-      </div>
-    `;
+        <button class="toggle ${hidden ? '' : 'on'}" aria-label="Visible"></button>
+      </div>`;
   }).join('');
-
-  el.querySelectorAll('[data-key]').forEach(row => {
+  document.getElementById('visibility-list').querySelectorAll('[data-key]').forEach(row => {
     const key = row.dataset.key;
-    const tog = row.querySelector('.toggle');
-    const lbl = row.querySelector('span.mono.text-muted.shrink-0');
-    tog.addEventListener('click', () => {
-      if (modalHidden.has(key)) { modalHidden.delete(key); } else { modalHidden.add(key); }
-      const hidden = modalHidden.has(key);
-      tog.classList.toggle('on', !hidden);
-      if (lbl) lbl.textContent = hidden ? 'oculto' : 'visible';
+    row.querySelector('.toggle').addEventListener('click', () => {
+      if (configHidden.has(key)) configHidden.delete(key); else configHidden.add(key);
+      const isHidden = configHidden.has(key);
+      row.querySelector('.toggle').classList.toggle('on', !isHidden);
     });
   });
 }
 
-function setModalStatus(msg, kind) {
-  const el = document.getElementById('modal-status');
-  if (!msg) { el.className = 'hidden'; return; }
-  const colors = {
-    ok:    'bg-accent/10 text-accent border border-accent/30',
-    err:   'bg-danger/10 text-danger border border-danger/30',
-    info:  'bg-accent2/10 text-accent2 border border-accent2/30',
+// ============= MANUAL EDITOR =============
+function openManualEditor(id) {
+  const editing = id ? configManualProjects.find(p => p.id === id) : null;
+  document.getElementById('em-id').value = editing ? editing.id : '';
+  document.getElementById('em-name').value = editing ? editing.name : '';
+  document.getElementById('em-description').value = editing ? (editing.description || '') : '';
+  document.getElementById('em-language').value = editing ? (editing.language || '') : '';
+  document.getElementById('em-external').value = editing ? (editing.external_url || '') : '';
+  document.getElementById('em-topics').value = editing ? (editing.topics || []).join(', ') : '';
+  document.getElementById('em-notes').value = editing ? (editing.notes || '') : '';
+  // owner select
+  const ownerSel = document.getElementById('em-owner');
+  ownerSel.innerHTML = (DATA.cofounders || []).map(c => `<option value="${esc(c.login)}" ${editing && editing.owner === c.login ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
+  // phase select
+  document.getElementById('em-phase').innerHTML = PHASES.map(ph => `<option value="${ph.id}" ${editing && editing.phase === ph.id ? 'selected' : ph.id === 'idea' && !editing ? 'selected' : ''}>${ph.label}</option>`).join('');
+  document.getElementById('edit-manual-title').textContent = editing ? `Editar: ${editing.name}` : 'Nuevo proyecto manual';
+  document.getElementById('em-delete').classList.toggle('hidden', !editing);
+  document.getElementById('em-delete').onclick = () => {
+    if (editing && confirm('¿Eliminar este proyecto manual?')) {
+      configManualProjects = configManualProjects.filter(x => x.id !== editing.id);
+      renderManualList();
+      closeManualEditor();
+    }
   };
+  document.getElementById('modal-edit-manual').classList.remove('hidden');
+  setTimeout(() => document.getElementById('em-name').focus(), 100);
+}
+function closeManualEditor() { document.getElementById('modal-edit-manual').classList.add('hidden'); }
+document.querySelectorAll('.close-edit-manual').forEach(b => b.addEventListener('click', closeManualEditor));
+
+document.getElementById('edit-manual-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const id = document.getElementById('em-id').value || uid();
+  const data = {
+    id,
+    name: document.getElementById('em-name').value.trim(),
+    description: document.getElementById('em-description').value.trim(),
+    owner: document.getElementById('em-owner').value,
+    phase: document.getElementById('em-phase').value,
+    language: document.getElementById('em-language').value.trim(),
+    external_url: document.getElementById('em-external').value.trim(),
+    topics: document.getElementById('em-topics').value.split(',').map(s => s.trim()).filter(Boolean),
+    notes: document.getElementById('em-notes').value.trim(),
+    updated_at: new Date().toISOString(),
+  };
+  const idx = configManualProjects.findIndex(p => p.id === id);
+  if (idx >= 0) {
+    configManualProjects[idx] = { ...configManualProjects[idx], ...data };
+  } else {
+    data.created_at = new Date().toISOString();
+    configManualProjects.push(data);
+  }
+  renderManualList();
+  closeManualEditor();
+});
+
+document.getElementById('add-manual').addEventListener('click', () => openManualEditor(null));
+
+// ============= SAVE (GitHub API) =============
+function setConfigStatus(msg, kind) {
+  const el = document.getElementById('config-status');
+  if (!msg) { el.className = 'hidden'; return; }
+  const colors = { ok:'bg-accent/10 text-accent border border-accent/30', err:'bg-danger/10 text-danger border border-danger/30', info:'bg-accent2/10 text-accent2 border border-accent2/30' };
   el.className = `mb-4 px-4 py-3 rounded-lg text-sm ${colors[kind || 'info']}`;
   el.textContent = msg;
 }
-
 async function ghGetSha(token) {
   const r = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_PATH}`, {
-    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' },
-    cache: 'no-store',
+    headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' }, cache: 'no-store',
   });
-  if (!r.ok) throw new Error(`GitHub GET ${r.status}: ${await r.text()}`);
-  const j = await r.json();
-  return j.sha;
+  if (!r.ok) throw new Error(`GitHub GET ${r.status}`);
+  return (await r.json()).sha;
 }
-
 async function ghPutData(token, sha, newData) {
-  // UTF-8 safe base64
   const json = JSON.stringify(newData, null, 2);
   const bytes = new TextEncoder().encode(json);
-  let bin = '';
-  bytes.forEach(b => bin += String.fromCharCode(b));
+  let bin = ''; bytes.forEach(b => bin += String.fromCharCode(b));
   const b64 = btoa(bin);
   const r = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_PATH}`, {
     method: 'PUT',
     headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message: 'data: actualizar visibilidad de repos desde la intranet',
-      content: b64,
-      sha,
-    }),
+    body: JSON.stringify({ message: 'data: actualizar intranet', content: b64, sha }),
   });
-  if (!r.ok) throw new Error(`GitHub PUT ${r.status}: ${await r.text()}`);
-  return r.json();
+  if (!r.ok) throw new Error(`GitHub PUT ${r.status}: ${(await r.text()).slice(0,200)}`);
 }
-
-async function save() {
-  setModalStatus('Conectando a GitHub…', 'info');
+async function getPATInteractive() {
   let token = localStorage.getItem('pz_gh_token');
   if (!token) {
     token = prompt('Pega tu GitHub Personal Access Token (fine-grained, Contents=write en puntozero-intranet):');
-    if (!token) { setModalStatus('Cancelado: hace falta token.', 'err'); return; }
+    if (!token) throw new Error('Sin token, no se puede guardar.');
     localStorage.setItem('pz_gh_token', token.trim());
     token = token.trim();
   }
-  try {
-    const sha = await ghGetSha(token);
-    const newData = { ...DATA, hidden_repos: [...modalHidden] };
-    await ghPutData(token, sha, newData);
-    DATA = newData;
-    setModalStatus('✓ Guardado. Pages se reconstruirá en ~30 s.', 'ok');
-    renderStats(); renderLangFilters(); render();
-    setTimeout(closeModal, 1500);
-  } catch (e) {
-    console.error(e);
-    if (String(e.message).includes('401') || String(e.message).includes('403')) {
-      localStorage.removeItem('pz_gh_token');
-      setModalStatus('Token inválido o sin permisos. Lo he eliminado, vuelve a intentar.', 'err');
-    } else {
-      setModalStatus(e.message, 'err');
-    }
-  }
+  return token;
 }
 
-document.getElementById('open-modal').addEventListener('click', openModal);
-document.getElementById('open-modal-mobile').addEventListener('click', openModal);
-document.getElementById('close-modal').addEventListener('click', closeModal);
-document.getElementById('cancel-btn').addEventListener('click', closeModal);
-document.getElementById('save-btn').addEventListener('click', save);
+/**
+ * Guarda TODO el estado (público + privado cifrado).
+ * Usa los valores de DATA + PRIV actuales.
+ */
+async function saveEverything() {
+  if (!PRIV) throw new Error('Sin sesión activa.');
+  const pwd = getStoredPassword();
+  if (!pwd) throw new Error('Sin password en sesión.');
+  const token = await getPATInteractive();
+  const sha = await ghGetSha(token);
+  const encrypted = await encryptPayload(pwd, PRIV);
+  const newData = {
+    ...DATA,
+    hidden_repos: Array.from(new Set(DATA.hidden_repos || [])),
+    encrypted,
+  };
+  await ghPutData(token, sha, newData);
+  DATA = newData;
+}
+
+document.getElementById('save-config').addEventListener('click', async () => {
+  // Aplica copias de trabajo a estado real
+  setConfigStatus('Guardando…', 'info');
+  try {
+    DATA.hidden_repos = Array.from(configHidden);
+    PRIV.manual_projects = configManualProjects;
+    PRIV.phase_overrides = configPhaseOverrides;
+    PRIV.notes = configNotes;
+    await saveEverything();
+    setConfigStatus('✓ Guardado. Pages se rebuilda en ~30 s.', 'ok');
+    renderAll();
+    setTimeout(closeConfig, 1500);
+  } catch (e) {
+    if (String(e.message).includes('401') || String(e.message).includes('403') || String(e.message).includes('404')) {
+      localStorage.removeItem('pz_gh_token');
+      setConfigStatus('Token GitHub inválido. Lo he olvidado, reintenta.', 'err');
+    } else {
+      setConfigStatus(e.message, 'err');
+    }
+  }
+});
+document.getElementById('cancel-config').addEventListener('click', closeConfig);
+document.getElementById('close-config').addEventListener('click', closeConfig);
+
 document.getElementById('forget-token').addEventListener('click', () => {
   localStorage.removeItem('pz_gh_token');
-  setModalStatus('Token olvidado.', 'info');
+  setConfigStatus('Token GitHub olvidado.', 'info');
+});
+document.getElementById('change-password').addEventListener('click', async () => {
+  const newp = prompt('Nuevo password (mínimo 6 caracteres):');
+  if (!newp || newp.length < 6) return;
+  const repeat = prompt('Repítelo:');
+  if (newp !== repeat) { alert('No coinciden'); return; }
+  const old = getStoredPassword();
+  if (!old || !PRIV) { alert('Inicia sesión antes.'); return; }
+  setStoredPassword(newp, true);
+  try {
+    await saveEverything();
+    setConfigStatus('✓ Password cambiado. Avisa a Alex del nuevo.', 'ok');
+  } catch (e) {
+    setStoredPassword(old, true);
+    setConfigStatus(e.message, 'err');
+  }
+});
+document.getElementById('logout').addEventListener('click', () => {
+  clearStoredPassword();
+  PRIV = null;
+  closeConfig();
+  renderAll();
+  showLogin({ firstTime: !DATA.encrypted });
 });
 
+// Open config
+document.getElementById('open-config').addEventListener('click', openConfig);
+document.getElementById('open-config-mobile').addEventListener('click', openConfig);
+
+// Misc
 document.getElementById('search').addEventListener('input', () => render());
 document.getElementById('year').textContent = new Date().getFullYear();
 document.getElementById('refresh').addEventListener('click', e => { e.preventDefault(); location.reload(); });
 
+// Close modals on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (!document.getElementById('modal-edit-manual').classList.contains('hidden')) { closeManualEditor(); return; }
+    if (!document.getElementById('modal-detail').classList.contains('hidden')) { closeDetail(); return; }
+    if (!document.getElementById('modal-config').classList.contains('hidden')) { closeConfig(); return; }
+  }
+});
+
+// GO
 load().catch(err => {
-  document.getElementById('repo-grid').innerHTML =
-    `<p class="col-span-3 text-red-400 text-sm">Error cargando datos: ${err.message}</p>`;
+  document.getElementById('repo-grid').innerHTML = `<p class="col-span-3 text-red-400 text-sm">Error cargando datos: ${err.message}</p>`;
 });
 </script>
-
 </body>
 </html>

@@ -84,7 +84,7 @@ def enrich(repo, owner_login):
 
 
 def main():
-    # Cargar config previa para preservar overrides
+    # Cargar config previa para preservar overrides (incluido el blob cifrado)
     prev = {}
     if OUT.exists():
         try:
@@ -92,6 +92,7 @@ def main():
         except Exception:
             prev = {}
     hidden_repos = prev.get("hidden_repos", [])
+    encrypted = prev.get("encrypted")  # blob privado cifrado, no se toca
 
     cofounders_full = []
     for c in COFOUNDERS:
@@ -113,12 +114,15 @@ def main():
             all_repos.append(enrich(r, login))
 
     data = {
+        "schema": 2,
         "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
         "company": "PuntoZero",
         "cofounders": cofounders_full,
         "hidden_repos": hidden_repos,
         "repos": all_repos,
     }
+    if encrypted:
+        data["encrypted"] = encrypted
     OUT.write_text(json.dumps(data, indent=2, ensure_ascii=False))
     print(f"\n✓ {OUT} actualizado · {len(all_repos)} repos · {len(cofounders_full)} cofounders")
 
