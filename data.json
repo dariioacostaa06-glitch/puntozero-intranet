@@ -1,0 +1,223 @@
+{
+  "generated_at": "2026-05-23T18:01:03",
+  "owner": "dariioacostaa06-glitch",
+  "company": "PuntoZero",
+  "repos": [
+    {
+      "name": "LosCaballos",
+      "description": "Carta digital de Bar Los Caballos",
+      "url": "https://github.com/dariioacostaa06-glitch/LosCaballos",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          100
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-05-23T09:40:29Z",
+      "homepage": "",
+      "pages_url": "https://dariioacostaa06-glitch.github.io/LosCaballos/",
+      "last_commit_msg": "ui(cards): recuadros uniformes con altura fija",
+      "last_commit_author": "dariioacostaa06-glitch",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "name": "PuntoZero",
+      "description": "En PuntoZero, aplicamos el máximo rigor de la ingeniería de software a proyectos de escala local. Cada caso de éxito que documentamos en este espacio es el resultado de aplicar nuestra filosofía de trabajo: absorber toda la complejidad técnica \"debajo del capó\" para entregar al cliente una herramienta ágil, segura y extremadamente fácil de usar.",
+      "url": "https://github.com/dariioacostaa06-glitch/PuntoZero",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          48
+        ],
+        [
+          "CSS",
+          38
+        ],
+        [
+          "JavaScript",
+          14
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-05-21T14:45:27Z",
+      "homepage": "",
+      "pages_url": "https://puntozerosl.es/",
+      "last_commit_msg": "feat: add Sobre Nosotros section and improve navigation",
+      "last_commit_author": "dariioacostaa06-glitch",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "name": "topdetail-landing",
+      "description": "",
+      "url": "https://github.com/dariioacostaa06-glitch/topdetail-landing",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          100
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-05-20T18:28:13Z",
+      "homepage": "",
+      "pages_url": "https://dariioacostaa06-glitch.github.io/topdetail-landing/",
+      "last_commit_msg": "Integrar fotos reales: hero fondo garage, galería y sección nosotros",
+      "last_commit_author": "darioacosta573",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "name": "Portfolio",
+      "description": "",
+      "url": "https://github.com/dariioacostaa06-glitch/Portfolio",
+      "visibility": "PUBLIC",
+      "language": "CSS",
+      "languages": [
+        [
+          "CSS",
+          48
+        ],
+        [
+          "HTML",
+          45
+        ],
+        [
+          "JavaScript",
+          7
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-05-15T16:31:04Z",
+      "homepage": "",
+      "pages_url": "https://dariioacostaa06-glitch.github.io/Portfolio/",
+      "last_commit_msg": "comit",
+      "last_commit_author": "Dario Acosta",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "name": "optica",
+      "description": "",
+      "url": "https://github.com/dariioacostaa06-glitch/optica",
+      "visibility": "PUBLIC",
+      "language": "CSS",
+      "languages": [
+        [
+          "CSS",
+          43
+        ],
+        [
+          "HTML",
+          42
+        ],
+        [
+          "JavaScript",
+          15
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-05-09T18:30:06Z",
+      "homepage": "",
+      "pages_url": "https://dariioacostaa06-glitch.github.io/optica/",
+      "last_commit_msg": "api whatsapp",
+      "last_commit_author": "Estepa",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "name": "SurOccidental",
+      "description": "",
+      "url": "https://github.com/dariioacostaa06-glitch/SurOccidental",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          100
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-05-04T15:28:42Z",
+      "homepage": "",
+      "pages_url": "https://dariioacostaa06-glitch.github.io/SurOccidental/",
+      "last_commit_msg": "comi",
+      "last_commit_author": "Dario Acosta",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "name": "DynamicHealth",
+      "description": "",
+      "url": "https://github.com/dariioacostaa06-glitch/DynamicHealth",
+      "visibility": "PUBLIC",
+      "language": "CSS",
+      "languages": [
+        [
+          "CSS",
+          53
+        ],
+        [
+          "HTML",
+          44
+        ],
+        [
+          "JavaScript",
+          3
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-04-30T07:26:10Z",
+      "homepage": "",
+      "pages_url": "http://dynamichealth.es/",
+      "last_commit_msg": "Create CNAME",
+      "last_commit_author": "dariioacostaa06-glitch",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "name": "JImeloMotor_2",
+      "description": "",
+      "url": "https://github.com/dariioacostaa06-glitch/JImeloMotor_2",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          100
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-04-29T22:03:01Z",
+      "homepage": "",
+      "pages_url": "https://dariioacostaa06-glitch.github.io/JImeloMotor_2/",
+      "last_commit_msg": "comit",
+      "last_commit_author": "Dario Acosta",
+      "archived": false,
+      "fork": false
+    }
+  ]
+}

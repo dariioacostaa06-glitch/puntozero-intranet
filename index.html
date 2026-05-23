@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>PuntoZero · Intranet</title>
+<meta name="description" content="Intranet interna de PuntoZero. Proyectos, equipo y métricas." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0e14'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%234ade80'/%3E%3C/svg%3E" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        bg:      '#0b0e14',
+        surface: '#131826',
+        sunken:  '#0e1320',
+        border:  '#1f2638',
+        text:    '#e7ecf3',
+        muted:   '#8b95a7',
+        accent:  '#4ade80',
+        accent2: '#60a5fa',
+        warn:    '#facc15',
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      },
+    }
+  }
+}
+</script>
+
+<style>
+  html, body { background: #0b0e14; color: #e7ecf3; }
+  body { font-family: 'Inter', system-ui, sans-serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  /* Subtle radial bg accent */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(74,222,128,0.07), transparent 70%),
+      radial-gradient(ellipse 80% 50% at 50% 120%, rgba(96,165,250,0.04), transparent 70%);
+  }
+  main, header, footer { position: relative; z-index: 1; }
+
+  /* Skeleton */
+  .skeleton { background: linear-gradient(90deg, #131826 25%, #1f2638 50%, #131826 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  /* Logo dot pulse */
+  .logo-dot { animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.55 } }
+
+  /* Card hover */
+  .repo-card { transition: transform .15s, border-color .15s, background .15s; }
+  .repo-card:hover { transform: translateY(-2px); border-color: #2c3851; background: #161c2d; }
+
+  /* Lang dot */
+  .lang-dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+</style>
+</head>
+
+<body class="min-h-screen">
+
+<!-- HEADER ===================================================== -->
+<header class="border-b border-border bg-bg/80 backdrop-blur sticky top-0 z-20">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-surface border border-border flex items-center justify-center">
+        <div class="w-3 h-3 rounded-full bg-accent logo-dot"></div>
+      </div>
+      <div>
+        <h1 class="text-base font-bold tracking-tight leading-none">PuntoZero</h1>
+        <p class="text-[11px] uppercase tracking-[0.2em] text-muted mt-0.5">Intranet</p>
+      </div>
+    </div>
+    <nav class="hidden sm:flex items-center gap-6 text-sm">
+      <a href="#proyectos" class="text-muted hover:text-text transition">Proyectos</a>
+      <a href="#equipo" class="text-muted hover:text-text transition">Equipo</a>
+      <a href="#stats" class="text-muted hover:text-text transition">Métricas</a>
+      <a id="github-link" href="#" target="_blank" rel="noopener" class="text-muted hover:text-accent transition mono text-xs">GitHub ↗</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO ======================================================= -->
+<section class="max-w-6xl mx-auto px-6 pt-12 pb-8">
+  <p class="mono text-xs text-accent uppercase tracking-[0.3em] mb-3">// kernel</p>
+  <h2 class="text-3xl sm:text-4xl font-bold leading-tight max-w-3xl">
+    Ingeniería de software con rigor,<br>
+    <span class="text-muted">para proyectos de escala local.</span>
+  </h2>
+  <p class="text-muted mt-4 max-w-2xl text-[15px] leading-relaxed">
+    Absorbemos toda la complejidad técnica debajo del capó. Lo que sale al cliente: herramientas
+    ágiles, seguras y fáciles de usar. Esta intranet es el panel de control interno donde vive
+    el estado de cada proyecto.
+  </p>
+</section>
+
+<!-- STATS ====================================================== -->
+<section id="stats" class="max-w-6xl mx-auto px-6 mb-10">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="border border-border rounded-xl p-4 bg-surface/40">
+      <p class="mono text-[10px] text-muted uppercase tracking-widest">Proyectos</p>
+      <p class="text-2xl font-bold mt-1" id="stat-projects">—</p>
+    </div>
+    <div class="border border-border rounded-xl p-4 bg-surface/40">
+      <p class="mono text-[10px] text-muted uppercase tracking-widest">Stack principal</p>
+      <p class="text-2xl font-bold mt-1" id="stat-stack">—</p>
+    </div>
+    <div class="border border-border rounded-xl p-4 bg-surface/40">
+      <p class="mono text-[10px] text-muted uppercase tracking-widest">Último push</p>
+      <p class="text-2xl font-bold mt-1" id="stat-last-push">—</p>
+    </div>
+    <div class="border border-border rounded-xl p-4 bg-surface/40">
+      <p class="mono text-[10px] text-muted uppercase tracking-widest">En producción</p>
+      <p class="text-2xl font-bold mt-1" id="stat-live">—</p>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO ===================================================== -->
+<section id="equipo" class="max-w-6xl mx-auto px-6 mb-12">
+  <div class="flex items-baseline justify-between mb-4">
+    <h3 class="text-lg font-semibold">Equipo</h3>
+    <p class="mono text-[10px] text-muted uppercase tracking-widest">Cofounders</p>
+  </div>
+  <div class="grid sm:grid-cols-2 gap-4">
+
+    <div class="border border-border rounded-xl p-5 bg-surface/40 flex gap-4 items-start">
+      <img id="founder1-avatar" src="" alt="" class="w-14 h-14 rounded-full border border-border bg-sunken" />
+      <div class="flex-1 min-w-0">
+        <p class="font-semibold" id="founder1-name">Darío Acosta</p>
+        <p class="mono text-xs text-muted mt-0.5" id="founder1-handle">@dariioacostaa06-glitch</p>
+        <p class="text-sm text-muted mt-2 leading-relaxed">Cofounder · Software & Producto</p>
+        <div class="flex gap-3 mt-3 text-xs">
+          <a target="_blank" rel="noopener" href="https://github.com/dariioacostaa06-glitch" class="text-accent hover:underline">GitHub</a>
+          <a href="mailto:dariioacostaa06@gmail.com" class="text-accent hover:underline">Email</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border border-border rounded-xl p-5 bg-surface/40 flex gap-4 items-start">
+      <img id="founder2-avatar" src="https://avatars.githubusercontent.com/alexestepagallego" alt="" class="w-14 h-14 rounded-full border border-border bg-sunken" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2232%22 fill=%22%23131826%22/%3E%3C/svg%3E'" />
+      <div class="flex-1 min-w-0">
+        <p class="font-semibold">Alex Estepa Gallego</p>
+        <p class="mono text-xs text-muted mt-0.5">@alexestepagallego</p>
+        <p class="text-sm text-muted mt-2 leading-relaxed">Cofounder · Negocio & Clientes</p>
+        <div class="flex gap-3 mt-3 text-xs">
+          <a target="_blank" rel="noopener" href="https://github.com/alexestepagallego" class="text-accent hover:underline">GitHub</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROYECTOS ================================================== -->
+<section id="proyectos" class="max-w-6xl mx-auto px-6 mb-20">
+
+  <div class="flex items-baseline justify-between mb-3 gap-3">
+    <h3 class="text-lg font-semibold">Proyectos</h3>
+    <p class="mono text-[10px] text-muted uppercase tracking-widest" id="repo-count">— repos</p>
+  </div>
+
+  <!-- Filtros -->
+  <div class="flex flex-col sm:flex-row gap-3 mb-5">
+    <input id="search" type="search" placeholder="Buscar proyecto…"
+           class="flex-1 bg-surface/60 border border-border rounded-lg px-4 py-2.5 text-sm outline-none focus:border-accent placeholder:text-muted/60" />
+    <div class="flex gap-2 overflow-x-auto" id="lang-filters"></div>
+  </div>
+
+  <!-- Grid -->
+  <div id="repo-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- skeletons -->
+    <div class="skeleton h-44 rounded-xl"></div>
+    <div class="skeleton h-44 rounded-xl"></div>
+    <div class="skeleton h-44 rounded-xl"></div>
+  </div>
+
+  <p id="empty" class="hidden text-center text-muted py-12 italic">Ningún proyecto coincide con el filtro.</p>
+</section>
+
+<!-- FOOTER ===================================================== -->
+<footer class="border-t border-border mt-10">
+  <div class="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-muted">
+    <p class="mono">PuntoZero © <span id="year"></span></p>
+    <p class="mono">Datos: <span id="generated-at">—</span> · <a href="#" id="refresh" class="hover:text-accent">refrescar</a></p>
+  </div>
+</footer>
+
+<script>
+// Colores por lenguaje (escala del propio GitHub)
+const LANG_COLORS = {
+  HTML: '#e34c26', CSS: '#563d7c', JavaScript: '#f1e05a', TypeScript: '#3178c6',
+  Python: '#3572A5', Shell: '#89e051', SCSS: '#c6538c', Vue: '#41b883',
+  Ruby: '#701516', Go: '#00ADD8', Rust: '#dea584', Java: '#b07219',
+  PHP: '#4F5D95', Svelte: '#ff3e00', Astro: '#ff5d01',
+};
+const langColor = l => LANG_COLORS[l] || '#8b95a7';
+
+function timeAgo(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  const diff = (Date.now() - d.getTime()) / 1000;
+  if (diff < 60) return 'hace segundos';
+  if (diff < 3600) return `hace ${Math.floor(diff/60)} min`;
+  if (diff < 86400) return `hace ${Math.floor(diff/3600)} h`;
+  if (diff < 86400*7) return `hace ${Math.floor(diff/86400)} d`;
+  if (diff < 86400*30) return `hace ${Math.floor(diff/(86400*7))} sem`;
+  if (diff < 86400*365) return `hace ${Math.floor(diff/(86400*30))} m`;
+  return `hace ${Math.floor(diff/(86400*365))} a`;
+}
+
+function escapeHtml(s) {
+  return (s ?? '').toString()
+    .replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+}
+
+let DATA = null;
+let activeLang = null;
+
+async function load() {
+  const r = await fetch('data.json?cb=' + Date.now());
+  DATA = await r.json();
+  document.getElementById('github-link').href = `https://github.com/${DATA.owner}`;
+  document.getElementById('founder1-avatar').src = `https://avatars.githubusercontent.com/${DATA.owner}`;
+  document.getElementById('founder1-handle').textContent = '@' + DATA.owner;
+  document.getElementById('generated-at').textContent = DATA.generated_at.replace('T', ' ').slice(0, 16);
+  renderStats();
+  renderLangFilters();
+  render();
+}
+
+function renderStats() {
+  const repos = DATA.repos;
+  // Stack principal: lenguaje más usado en bytes agregados (aprox por count primary)
+  const counts = {};
+  for (const r of repos) {
+    if (r.language) counts[r.language] = (counts[r.language] || 0) + 1;
+  }
+  const topLang = Object.entries(counts).sort((a,b) => b[1]-a[1])[0]?.[0] || '—';
+
+  // Último push global
+  let lastPush = null;
+  for (const r of repos) {
+    if (r.pushed_at && (!lastPush || r.pushed_at > lastPush)) lastPush = r.pushed_at;
+  }
+
+  // En producción = repos con pages_url o homepage
+  const live = repos.filter(r => r.pages_url || r.homepage).length;
+
+  document.getElementById('stat-projects').textContent = repos.length;
+  document.getElementById('stat-stack').textContent = topLang;
+  document.getElementById('stat-last-push').textContent = timeAgo(lastPush);
+  document.getElementById('stat-live').innerHTML = `${live}<span class="text-base text-muted ml-1">/${repos.length}</span>`;
+}
+
+function renderLangFilters() {
+  const langs = [...new Set(DATA.repos.map(r => r.language).filter(Boolean))].sort();
+  const el = document.getElementById('lang-filters');
+  el.innerHTML = `
+    <button data-lang="" class="lang-btn shrink-0 px-3 py-2 text-xs mono uppercase tracking-wider rounded-lg border border-border bg-surface/60 hover:border-accent">Todos</button>
+    ${langs.map(l => `
+      <button data-lang="${escapeHtml(l)}" class="lang-btn shrink-0 px-3 py-2 text-xs mono uppercase tracking-wider rounded-lg border border-border bg-surface/60 hover:border-accent flex items-center gap-2">
+        <span class="lang-dot" style="background:${langColor(l)}"></span>${escapeHtml(l)}
+      </button>`).join('')}
+  `;
+  el.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeLang = btn.dataset.lang || null;
+      el.querySelectorAll('.lang-btn').forEach(b => {
+        b.classList.toggle('border-accent', (b.dataset.lang || null) === activeLang);
+        b.classList.toggle('text-accent', (b.dataset.lang || null) === activeLang);
+      });
+      render();
+    });
+  });
+}
+
+function render() {
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  let repos = DATA.repos.filter(r => {
+    if (activeLang && r.language !== activeLang) return false;
+    if (q && !`${r.name} ${r.description} ${r.topics.join(' ')}`.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  // Sort by last push desc
+  repos.sort((a, b) => (b.pushed_at || '').localeCompare(a.pushed_at || ''));
+
+  document.getElementById('repo-count').textContent = `${repos.length} repos · ${DATA.repos.length} totales`;
+  const grid = document.getElementById('repo-grid');
+  const empty = document.getElementById('empty');
+  empty.classList.toggle('hidden', repos.length > 0);
+
+  grid.innerHTML = repos.map(r => {
+    const liveUrl = r.pages_url || r.homepage;
+    return `
+      <article class="repo-card border border-border rounded-xl p-5 bg-surface/40 flex flex-col">
+        <div class="flex items-start justify-between gap-2 mb-2">
+          <a href="${escapeHtml(r.url)}" target="_blank" rel="noopener" class="font-semibold text-base text-text hover:text-accent transition truncate">${escapeHtml(r.name)}</a>
+          <span class="mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded ${r.visibility === 'PUBLIC' ? 'bg-accent/10 text-accent' : 'bg-warn/10 text-warn'}">${r.visibility.toLowerCase()}</span>
+        </div>
+        <p class="text-sm text-muted leading-relaxed flex-1 mb-3 line-clamp-3">${escapeHtml(r.description || 'Sin descripción.')}</p>
+
+        ${r.topics.length ? `
+        <div class="flex flex-wrap gap-1 mb-3">
+          ${r.topics.slice(0, 4).map(t => `<span class="mono text-[10px] px-2 py-0.5 rounded bg-sunken text-muted border border-border">${escapeHtml(t)}</span>`).join('')}
+        </div>` : ''}
+
+        <div class="mt-auto pt-3 border-t border-border/60 flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2 text-muted">
+            ${r.language ? `<span class="lang-dot" style="background:${langColor(r.language)}"></span><span class="mono">${escapeHtml(r.language)}</span>` : '<span class="mono text-muted/60">—</span>'}
+          </div>
+          <div class="flex items-center gap-3 text-muted">
+            <span class="mono" title="${escapeHtml(r.last_commit_msg)}">${timeAgo(r.pushed_at)}</span>
+            ${liveUrl ? `<a href="${escapeHtml(liveUrl)}" target="_blank" rel="noopener" class="text-accent2 hover:underline">live ↗</a>` : ''}
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+document.getElementById('search').addEventListener('input', () => render());
+document.getElementById('year').textContent = new Date().getFullYear();
+document.getElementById('refresh').addEventListener('click', e => { e.preventDefault(); location.reload(); });
+
+load().catch(err => {
+  document.getElementById('repo-grid').innerHTML =
+    `<p class="col-span-3 text-red-400 text-sm">Error cargando datos: ${err.message}</p>`;
+});
+</script>
+
+</body>
+</html>
