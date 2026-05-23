@@ -1,9 +1,53 @@
 {
-  "generated_at": "2026-05-23T18:01:03",
-  "owner": "dariioacostaa06-glitch",
+  "generated_at": "2026-05-23T18:09:52",
   "company": "PuntoZero",
+  "cofounders": [
+    {
+      "login": "dariioacostaa06-glitch",
+      "name": "Darío Acosta",
+      "role": "Software & Producto",
+      "avatar": "https://avatars.githubusercontent.com/u/267276896?v=4"
+    },
+    {
+      "login": "alexestepagallego",
+      "name": "Alex Estepa Gallego",
+      "role": "Negocio & Clientes",
+      "avatar": "https://avatars.githubusercontent.com/u/246524783?v=4"
+    }
+  ],
+  "hidden_repos": [],
   "repos": [
     {
+      "owner": "dariioacostaa06-glitch",
+      "name": "puntozero-intranet",
+      "description": "Intranet interna de PuntoZero · dashboard de proyectos",
+      "url": "https://github.com/dariioacostaa06-glitch/puntozero-intranet",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          84
+        ],
+        [
+          "Python",
+          16
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-05-23T16:03:33Z",
+      "homepage": "",
+      "pages_url": "https://dariioacostaa06-glitch.github.io/puntozero-intranet/",
+      "last_commit_msg": "feat: intranet PuntoZero · dashboard de proyectos GitHub",
+      "last_commit_author": "dariioacostaa06-glitch",
+      "last_commit_date": "2026-05-23T16:03:18Z",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "owner": "dariioacostaa06-glitch",
       "name": "LosCaballos",
       "description": "Carta digital de Bar Los Caballos",
       "url": "https://github.com/dariioacostaa06-glitch/LosCaballos",
@@ -23,10 +67,12 @@
       "pages_url": "https://dariioacostaa06-glitch.github.io/LosCaballos/",
       "last_commit_msg": "ui(cards): recuadros uniformes con altura fija",
       "last_commit_author": "dariioacostaa06-glitch",
+      "last_commit_date": "2026-05-23T09:40:27Z",
       "archived": false,
       "fork": false
     },
     {
+      "owner": "dariioacostaa06-glitch",
       "name": "PuntoZero",
       "description": "En PuntoZero, aplicamos el máximo rigor de la ingeniería de software a proyectos de escala local. Cada caso de éxito que documentamos en este espacio es el resultado de aplicar nuestra filosofía de trabajo: absorber toda la complejidad técnica \"debajo del capó\" para entregar al cliente una herramienta ágil, segura y extremadamente fácil de usar.",
       "url": "https://github.com/dariioacostaa06-glitch/PuntoZero",
@@ -54,10 +100,12 @@
       "pages_url": "https://puntozerosl.es/",
       "last_commit_msg": "feat: add Sobre Nosotros section and improve navigation",
       "last_commit_author": "dariioacostaa06-glitch",
+      "last_commit_date": "2026-05-21T14:45:18Z",
       "archived": false,
       "fork": false
     },
     {
+      "owner": "dariioacostaa06-glitch",
       "name": "topdetail-landing",
       "description": "",
       "url": "https://github.com/dariioacostaa06-glitch/topdetail-landing",
@@ -77,10 +125,12 @@
       "pages_url": "https://dariioacostaa06-glitch.github.io/topdetail-landing/",
       "last_commit_msg": "Integrar fotos reales: hero fondo garage, galería y sección nosotros",
       "last_commit_author": "darioacosta573",
+      "last_commit_date": "2026-05-20T18:28:11Z",
       "archived": false,
       "fork": false
     },
     {
+      "owner": "dariioacostaa06-glitch",
       "name": "Portfolio",
       "description": "",
       "url": "https://github.com/dariioacostaa06-glitch/Portfolio",
@@ -108,10 +158,12 @@
       "pages_url": "https://dariioacostaa06-glitch.github.io/Portfolio/",
       "last_commit_msg": "comit",
       "last_commit_author": "Dario Acosta",
+      "last_commit_date": "2026-05-15T16:30:56Z",
       "archived": false,
       "fork": false
     },
     {
+      "owner": "dariioacostaa06-glitch",
       "name": "optica",
       "description": "",
       "url": "https://github.com/dariioacostaa06-glitch/optica",
@@ -139,10 +191,12 @@
       "pages_url": "https://dariioacostaa06-glitch.github.io/optica/",
       "last_commit_msg": "api whatsapp",
       "last_commit_author": "Estepa",
+      "last_commit_date": "2026-05-09T18:30:02Z",
       "archived": false,
       "fork": false
     },
     {
+      "owner": "dariioacostaa06-glitch",
       "name": "SurOccidental",
       "description": "",
       "url": "https://github.com/dariioacostaa06-glitch/SurOccidental",
@@ -162,10 +216,12 @@
       "pages_url": "https://dariioacostaa06-glitch.github.io/SurOccidental/",
       "last_commit_msg": "comi",
       "last_commit_author": "Dario Acosta",
+      "last_commit_date": "2026-05-04T15:28:30Z",
       "archived": false,
       "fork": false
     },
     {
+      "owner": "dariioacostaa06-glitch",
       "name": "DynamicHealth",
       "description": "",
       "url": "https://github.com/dariioacostaa06-glitch/DynamicHealth",
@@ -193,10 +249,12 @@
       "pages_url": "http://dynamichealth.es/",
       "last_commit_msg": "Create CNAME",
       "last_commit_author": "dariioacostaa06-glitch",
+      "last_commit_date": "2026-04-30T07:26:09Z",
       "archived": false,
       "fork": false
     },
     {
+      "owner": "dariioacostaa06-glitch",
       "name": "JImeloMotor_2",
       "description": "",
       "url": "https://github.com/dariioacostaa06-glitch/JImeloMotor_2",
@@ -216,6 +274,223 @@
       "pages_url": "https://dariioacostaa06-glitch.github.io/JImeloMotor_2/",
       "last_commit_msg": "comit",
       "last_commit_author": "Dario Acosta",
+      "last_commit_date": "2026-04-29T22:02:56Z",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "owner": "alexestepagallego",
+      "name": "chanebarber",
+      "description": "",
+      "url": "https://github.com/alexestepagallego/chanebarber",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          100
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-05-23T15:52:39Z",
+      "homepage": "",
+      "pages_url": "https://alexestepagallego.github.io/chanebarber/",
+      "last_commit_msg": "version 4, fucking moivl funciona ya",
+      "last_commit_author": "Estepa",
+      "last_commit_date": "2026-05-23T15:52:35Z",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "owner": "alexestepagallego",
+      "name": "Scroll-animado-prueba",
+      "description": "",
+      "url": "https://github.com/alexestepagallego/Scroll-animado-prueba",
+      "visibility": "PUBLIC",
+      "language": "JavaScript",
+      "languages": [
+        [
+          "JavaScript",
+          47
+        ],
+        [
+          "CSS",
+          40
+        ],
+        [
+          "HTML",
+          13
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-05-16T12:10:31Z",
+      "homepage": "",
+      "pages_url": "https://alexestepagallego.github.io/Scroll-animado-prueba/",
+      "last_commit_msg": "mejoras",
+      "last_commit_author": "Estepa",
+      "last_commit_date": "2026-05-16T12:10:26Z",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "owner": "alexestepagallego",
+      "name": "GARCIANIETO",
+      "description": "",
+      "url": "https://github.com/alexestepagallego/GARCIANIETO",
+      "visibility": "PUBLIC",
+      "language": "CSS",
+      "languages": [
+        [
+          "CSS",
+          57
+        ],
+        [
+          "HTML",
+          38
+        ],
+        [
+          "JavaScript",
+          5
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-05-09T18:55:25Z",
+      "homepage": "https://garcianieto.vercel.app",
+      "pages_url": "https://alexestepagallego.github.io/GARCIANIETO/",
+      "last_commit_msg": "hola",
+      "last_commit_author": "Estepa",
+      "last_commit_date": "2026-05-09T18:55:11Z",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "owner": "alexestepagallego",
+      "name": "JBH",
+      "description": "",
+      "url": "https://github.com/alexestepagallego/JBH",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          100
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-05-09T16:45:46Z",
+      "homepage": "",
+      "pages_url": "https://alexestepagallego.github.io/JBH/",
+      "last_commit_msg": "Ajuste para telefono",
+      "last_commit_author": "Estepa",
+      "last_commit_date": "2026-05-09T16:45:40Z",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "owner": "alexestepagallego",
+      "name": "JimeloMotors",
+      "description": "",
+      "url": "https://github.com/alexestepagallego/JimeloMotors",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          100
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-04-29T21:19:46Z",
+      "homepage": "",
+      "pages_url": "https://alexestepagallego.github.io/JimeloMotors/",
+      "last_commit_msg": "comit",
+      "last_commit_author": "Dario Acosta",
+      "last_commit_date": "2026-04-29T21:19:35Z",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "owner": "alexestepagallego",
+      "name": "flappy-Rigby",
+      "description": "",
+      "url": "https://github.com/alexestepagallego/flappy-Rigby",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          100
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-04-14T08:14:51Z",
+      "homepage": "",
+      "pages_url": "https://alexestepagallego.github.io/flappy-Rigby/",
+      "last_commit_msg": "mejoras",
+      "last_commit_author": "alexestepagallego",
+      "last_commit_date": "2026-04-14T08:14:51Z",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "owner": "alexestepagallego",
+      "name": "Glade",
+      "description": "",
+      "url": "https://github.com/alexestepagallego/Glade",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          100
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-03-30T14:38:05Z",
+      "homepage": "",
+      "pages_url": "https://alexestepagallego.github.io/Glade/",
+      "last_commit_msg": "Add files via upload",
+      "last_commit_author": "alexestepagallego",
+      "last_commit_date": "2026-03-30T14:38:04Z",
+      "archived": false,
+      "fork": false
+    },
+    {
+      "owner": "alexestepagallego",
+      "name": "GYMTRACK",
+      "description": "",
+      "url": "https://github.com/alexestepagallego/GYMTRACK",
+      "visibility": "PUBLIC",
+      "language": "HTML",
+      "languages": [
+        [
+          "HTML",
+          100
+        ]
+      ],
+      "topics": [],
+      "stars": 0,
+      "forks": 0,
+      "pushed_at": "2026-03-11T22:04:27Z",
+      "homepage": "",
+      "pages_url": "https://alexestepagallego.github.io/GYMTRACK/",
+      "last_commit_msg": "Mejora en la navegacion de menus",
+      "last_commit_author": "alexestepagallego",
+      "last_commit_date": "2026-03-11T22:04:23Z",
       "archived": false,
       "fork": false
     }
