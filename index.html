@@ -31,12 +31,11 @@ tailwind.config = {
   body { font-family:'Inter', system-ui, sans-serif; }
   .mono { font-family:'JetBrains Mono', monospace; }
   body::before {
-    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:-1;
     background:
       radial-gradient(ellipse 80% 50% at 50% -20%, rgba(74,222,128,0.07), transparent 70%),
       radial-gradient(ellipse 80% 50% at 50% 120%, rgba(96,165,250,0.04), transparent 70%);
   }
-  main, header, footer, #modal-config, #modal-detail, #modal-login { position:relative; z-index:1; }
   .skeleton { background:linear-gradient(90deg,#131826 25%,#1f2638 50%,#131826 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; }
   @keyframes shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
   .logo-dot { animation:pulse 2.4s ease-in-out infinite; }
