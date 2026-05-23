@@ -494,5 +494,12 @@
       "archived": false,
       "fork": false
     }
-  ]
+  ],
+  "encrypted": {
+    "salt": "5mJh7c0fHCNKzeS1poRH6ePI1c1FkhUxVo2MK8w1rCE=",
+    "iv": "bd6v9yknCTr8ybpi",
+    "data": "7lOCfWA0KEZFOhZYYIdEbIk752q57i6BatUX7cyAc67TelraVqa1QHGcAMBtY8T9K2YSackOn5OpmjEhgjBftuAUACPzwbB53ZZT",
+    "iv_check": "ZDb/z9nEEYQ9giUr",
+    "check": "ohlSDnA7EwvO9JpQaHRSxt0duDvcF0qJ"
+  }
 }
